@@ -131,8 +131,7 @@ int main(int argc, char *argv[]) {
                 command_line_arguments.push_back({ flag.name, flag.current_value });
             }
         }
-        FLAGS_report_type = detailedCntReport;
-        FLAGS_pc = true;
+        FLAGS_api = "sync";
         FLAGS_t = 2;
         if (!FLAGS_report_type.empty()) {
             statistics = std::make_shared<StatisticsReport>(StatisticsReport::Config{FLAGS_report_type, FLAGS_report_folder});
@@ -549,6 +548,7 @@ int main(int argc, char *argv[]) {
 
         auto startTime = Time::now();
         auto execTime = std::chrono::duration_cast<ns>(Time::now() - startTime).count();
+        auto prevTStamp = startTime;
 
         /** Start inference & calculate performance **/
         /** to align number if iterations to guarantee that last infer requests are executed in the same conditions **/
@@ -575,7 +575,11 @@ int main(int argc, char *argv[]) {
             }
             iteration++;
 
-            execTime = std::chrono::duration_cast<ns>(Time::now() - startTime).count();
+            auto currentTStamp = Time::now();
+            execTime = std::chrono::duration_cast<ns>(currentTStamp - startTime).count();
+            auto iterationCount = std::chrono::duration_cast<std::chrono::microseconds>(currentTStamp - prevTStamp).count();
+            std::cout << "Exec time: " << iterationCount << " of iteration " << iteration << "\n";
+            prevTStamp = currentTStamp;
 
             if (niter > 0) {
                 progressBar.addProgress(1);
