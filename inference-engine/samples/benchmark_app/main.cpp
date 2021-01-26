@@ -547,7 +547,6 @@ int main(int argc, char *argv[]) {
 
         auto startTime = Time::now();
         auto execTime = std::chrono::duration_cast<ns>(Time::now() - startTime).count();
-        auto prevTStamp = startTime;
 
         /** Start inference & calculate performance **/
         /** to align number if iterations to guarantee that last infer requests are executed in the same conditions **/
@@ -574,11 +573,7 @@ int main(int argc, char *argv[]) {
             }
             iteration++;
 
-            auto currentTStamp = Time::now();
-            execTime = std::chrono::duration_cast<ns>(currentTStamp - startTime).count();
-            auto iterationCount = std::chrono::duration_cast<std::chrono::microseconds>(currentTStamp - prevTStamp).count();
-            std::cout << "Exec time: " << iterationCount << " of iteration " << iteration << "\n";
-            prevTStamp = currentTStamp;
+            execTime = std::chrono::duration_cast<ns>(Time::now() - startTime).count();
 
             if (niter > 0) {
                 progressBar.addProgress(1);
