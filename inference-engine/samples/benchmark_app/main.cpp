@@ -131,7 +131,8 @@ int main(int argc, char *argv[]) {
                 command_line_arguments.push_back({ flag.name, flag.current_value });
             }
         }
-        FLAGS_nireq = 4;
+        // FLAGS_nireq = 4;
+        FLAGS_nstreams = "4";
         if (!FLAGS_report_type.empty()) {
             statistics = std::make_shared<StatisticsReport>(StatisticsReport::Config{FLAGS_report_type, FLAGS_report_folder});
             statistics->addParameters(StatisticsReport::Category::COMMAND_LINE_PARAMETERS, command_line_arguments);
